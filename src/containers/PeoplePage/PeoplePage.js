@@ -6,6 +6,7 @@ import {API_PEOPLE} from "@constants/api";
 import {getPeopleId, getPeopleImage, getPeoplePageId} from "@services/getPeopleData";
 import PeopleList from "@components/PeoplePage/PeopleList";
 import {useQueryParams} from "@hooks/useQueryParams";
+import PeopleNavigation from "@components/PeoplePage/PeopleNavigation";
 
 import styles from "./PeoplePage.module.css"
 import PropTypes from "prop-types";
@@ -26,7 +27,6 @@ const PeoplePage = ({setErrorApi}) => {
         if (res) {
             const peopleList = res.results.map(({name, url}) => {
                 const id = getPeopleId(url);
-
                 const img = getPeopleImage(id);
 
                 return {
@@ -48,11 +48,16 @@ const PeoplePage = ({setErrorApi}) => {
 
     useEffect(() => {
         getResource(API_PEOPLE + queryPage)
-    }, [queryPage])
+    }, [])
 
     return (
         <>
-            <h1 className="header__text">Navigation</h1>
+            <PeopleNavigation
+                getResource={getResource}
+                prevPage={prevPage}
+                nextPage={nextPage}
+                counterPage={counterPage}
+            />
             <PeopleList people={people}/>
         </>
     )

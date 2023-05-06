@@ -1,22 +1,25 @@
-import {HTTPS, HTTP, SWAPI_ROOT, SWAPI_PEOPLE, GUIDE_IMG_EXTENSION, URL_IMG_PERSON} from "@constants/api";
+import {HTTPS, HTTP, SWAPI_ROOT, SWAPI_PEOPLE, GUIDE_IMG_EXTENSION, URL_IMG_PERSON, SWAPI_PARAM_PAGE} from "@constants/api";
 
 export const getPeoplePageId = url => {
+    const pos =  url.lastIndexOf(SWAPI_PARAM_PAGE);
+    const id = url.slice(pos + SWAPI_PARAM_PAGE.length, url.length);
 
+    return Number(id);
 }
 
-const checkProtocol = url => {
-    if (url.indexOf(HTTPS)) {
-        return HTTPS
-    }
-
-    return HTTP
-}
+// const checkProtocol = url => {
+//     if (url.indexOf(HTTPS)) {
+//         return HTTPS
+//     }
+//
+//     return HTTP
+// }
 
 const getId = (url, category) => {
-    const protocol = checkProtocol(url);
+    // const protocol = checkProtocol(url);
 
     const id = url
-        .replace(protocol + SWAPI_ROOT + category, '')
+        .replace(HTTPS + SWAPI_ROOT + category, '')
         .replace(/\//g, '');
     return id
 }
