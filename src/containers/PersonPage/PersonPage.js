@@ -1,6 +1,8 @@
 import PropTypes from "prop-types"
 import {useParams} from "react-router";
 import React, {useEffect, useState, Suspense} from "react";
+import {useSelector} from "react-redux";
+import {useRef} from "react";
 
 import {getApiResource} from "@utils/network";
 import {getPeopleImage} from "../../services/getPeopleData";
@@ -18,16 +20,23 @@ import styles from './PersonPage.module.css'
 const PersonFilms = React.lazy(() => import('@components/PersonPage/PersonFilms'))
 
 const PersonPage = ({setErrorApi}) => {
+    const [personId, setPersonId] = useState(null);
     const [personInfo, setPersonInfo] = useState(null);
     const [personName, setPersonName] = useState(null);
     const [personPhoto, setPersonPhoto] = useState(null);
     const [personFilms, setPersonFilms] = useState(null);
+    const [personFavorite, setPersonFavorite] = useState(false);
+
+    const storeData = useSelector(state => state.favoriteReducer);
 
     const {id} = useParams();
 
     useEffect(() => {
         (async () => {
             const res = await getApiResource(API_PERSON + `/${id}/`);
+
+            setPersonId(id);
+            setPersonFavorite(!!storeData[id])
 
             if (res) {
                 setPersonInfo([
@@ -60,8 +69,11 @@ const PersonPage = ({setErrorApi}) => {
 
                 <div className={styles.container}>
                     <PersonPhoto
+                        personId={personId}
                         personPhoto={personPhoto}
                         personName={personName}
+                        personFavorite={personFavorite}
+                        setPersonFavorite={setPersonFavorite}
                     />
 
 
